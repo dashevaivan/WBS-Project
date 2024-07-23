@@ -1,0 +1,68 @@
+body {
+    background-image: url('/image.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.navbar-custom {
+    background-color: #0049A8;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 1);
+    position: fixed;
+}
+
+.text-navbar {
+    text-shadow: 0px 3px 4px #000000;
+    color: #FFFFFF !important; 
+    font-family: Montserrat;
+    font-size: 12px !important;
+    letter-spacing: 0.1rem;
+}
+
+.footer {
+    background-color: #556481;
+    color: white;
+    font-family: Montserrat;
+    font-size: 10px !important;
+    padding: 10px;
+    bottom: 0;
+    width: 100%;
+  }
+
+.report-status {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-family: 'Montserrat';
+}
+
+.status {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.status.new { background-color: #00bfff; }
+.status.ongoing { background-color: #4d4d4d; }
+.status.approved { background-color: #32cd32; }
+.status.closed { background-color: #ffcc00; }
+.status.rejected { background-color: #ff4d4d; }
+
+.reports {
+    display: flex;
+    justify-content: space-between;
+}
+
+.report-card {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px 0;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+}
