@@ -5,11 +5,12 @@
 <h2 class="card-title d-flex" style="font-family: Montserrat; font-weight: bold; margin-left: 30px">Report Details</h2>
 
 <div class="container card-subtitle d-flex justify-content-between">
-    <p style="display: flex; font-style: italic; margin-left: 25px;">Tipe Pelanggaran : {{ $report->violations }}</p>
+    <p style="display: flex; font-style: italic; margin-left: 25px;">Reported By: {{ $report->user->full_name }} - {{ $report->user->phone_number ?? 'N/A' }}</p>
     <p style="display: flex; font-style: italic;">Status : {{ $report->status }}</p>
 </div>
 
-<p style="display: flex; font-style: italic; margin-left: 38px;">Kejadian : </p>
+<p style="display: flex; font-style: italic; margin-left: 38px;">Violations: {{ $report->violations }}</p>
+<p style="display: flex; font-style: italic; margin-left: 38px;">Description: </p>
 <div class="container card-subtitle">
     <p style="text-align: justify; margin-left: 25px;">{{ $report->description }}</p>
 
@@ -19,10 +20,9 @@
 
         <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px;">Update Status</h3>
         <select name="status" class="form-control">
-            <option value="Ongoing" {{ $report->status == 'Ongoing' ? 'selected' : '' }}>Ongoing</option>
-            <option value="Approved" {{ $report->status == 'Approved' ? 'selected' : '' }}>Approved</option>
-            <option value="Closed" {{ $report->status == 'Closed' ? 'selected' : '' }}>Closed</option>
-            <option value="Rejected" {{ $report->status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+            @foreach ($allowedStatuses as $status)
+                <option value="{{ $status }}" {{ $report->status == $status ? 'selected' : '' }}>{{ $status }}</option>
+            @endforeach
         </select>
 
         <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px; margin-top: 15px;">Feedback</h3>

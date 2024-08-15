@@ -46,10 +46,10 @@ class ReportController extends Controller
             'violations' => implode(', ', $request->violations), // Store as a comma-separated string
             'description' => $request->description,
             'evidence' => $filePath,
-            'status' => 'Ongoing', // Default status
+            'status' => 'New', // Default status is set to 'New'
         ]);
 
-        return view('reports.thanks');
+        return view('reports.thanks'); // Assuming you have a thanks page to show after submission
     }
 
     public function index()
@@ -99,8 +99,6 @@ class ReportController extends Controller
             'evidence' => $filePath,
         ]);
 
-        return redirect()->route('reports.show', $report->id)->with('success', 'Report updated successfully.');
+        return redirect()->route('reports.show', $report->id)->with('success', 'Laporan berhasil di-update.');
     }
-
-
 }

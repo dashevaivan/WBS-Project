@@ -11,71 +11,67 @@
     <hr style="border: 1px solid black;">
     
     <div class="d-flex align-items-center mb-4">
-        <form action="" method="GET" class="d-flex">
+        <form action="{{ route('admin.reports.index') }}" method="GET" class="d-flex me-3">
             <label for="startperiod" class="me-2">Period :</label>
-            <input type="date" id="startperiod" name="startperiod" class="form-control me-2">
+            <input type="date" id="startperiod" name="startperiod" class="form-control me-2" value="{{ request('startperiod') }}">
             <label for="endperiod" class="me-2">-</label>
-            <input type="date" id="endperiod" name="endperiod" class="form-control me-2">
+            <input type="date" id="endperiod" name="endperiod" class="form-control me-2" value="{{ request('endperiod') }}">
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
+
+        <!-- Status selection and print button -->
+        <div class="d-flex">
+            <select name="status" id="status" class="form-control me-2">
+                <option value="">Select Status</option>
+                <option value="New">New</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Approved">Approved</option>
+                <option value="Closed">Closed</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <button type="button" id="printButton" class="btn btn-secondary">Print</button>
+        </div>
     </div>
 
-    <div class="row text-center">
-        <div class="col status new">
-            <h4 class="text-uppercase p-2 rounded" style="background-color: #00BCD4; color: white;">New</h4>
-            @foreach ($reports['New'] ?? [] as $report)
-                <div class="report-card mb-3 p-3 border rounded" style="background-color: #E0F7FA;">
-                    <a href="{{ route('admin.reports.show', $report->id) }}" style="color: #006064; font-weight: bold;">
-                        {{ $report->user->name ?? 'Anonymous' }} - {{ $report->created_at->format('F j, Y H:i') }} <br> ID: {{ $report->id }}
-                    </a>
+    @if ($reports->isEmpty())
+        <div class="alert alert-warning">
+            No reports found for the selected period.
+        </div>
+    @else
+        <div class="row text-center">
+            @foreach (['New', 'Ongoing', 'Approved', 'Closed', 'Rejected'] as $status)
+                <div class="col status {{ strtolower($status) }}">
+                    <h4 class="text-uppercase p-2 rounded" style="background-color: {{ $statusColors[$status] }}; color: white;">{{ $status }}</h4>
+                    @foreach ($reports[$status] ?? [] as $report)
+                        <div class="report-card mb-3 p-3 border rounded" style="background-color: {{ $statusBackgroundColors[$status] }};">
+                            <a href="{{ route('admin.reports.show', $report->id) }}" style="color: {{ $statusTextColors[$status] }}; font-weight: bold;">
+                                Name: {{ $report->user->full_name }} <br>
+                                Phone: {{ $report->user->phone_number }} <br>
+                                Date: {{ $report->created_at->format('F j, Y H:i') }} <br>
+                                ID: {{ $report->id }}
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             @endforeach
         </div>
-        
-        <div class="col status ongoing">
-            <h4 class="text-uppercase p-2 rounded" style="background-color: #757575; color: white;">Ongoing</h4>
-            @foreach ($reports['Ongoing'] ?? [] as $report)
-                <div class="report-card mb-3 p-3 border rounded" style="background-color: #CFD8DC;">
-                    <a href="{{ route('admin.reports.show', $report->id) }}" style="color: #37474F; font-weight: bold;">
-                        {{ $report->user->name ?? 'Anonymous' }} - {{ $report->created_at->format('F j, Y H:i') }} <br> ID: {{ $report->id }}
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="col status approved">
-            <h4 class="text-uppercase p-2 rounded" style="background-color: #4CAF50; color: white;">Approved</h4>
-            @foreach ($reports['Approved'] ?? [] as $report)
-                <div class="report-card mb-3 p-3 border rounded" style="background-color: #C8E6C9;">
-                    <a href="{{ route('admin.reports.show', $report->id) }}" style="color: #2E7D32; font-weight: bold;">
-                        {{ $report->user->name ?? 'Anonymous' }} - {{ $report->created_at->format('F j, Y H:i') }} <br> ID: {{ $report->id }}
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="col status closed">
-            <h4 class="text-uppercase p-2 rounded" style="background-color: #FFC107; color: white;">Closed</h4>
-            @foreach ($reports['Closed'] ?? [] as $report)
-                <div class="report-card mb-3 p-3 border rounded" style="background-color: #FFECB3;">
-                    <a href="{{ route('admin.reports.show', $report->id) }}" style="color: #FF6F00; font-weight: bold;">
-                        {{ $report->user->name ?? 'Anonymous' }} - {{ $report->created_at->format('F j, Y H:i') }} <br> ID: {{ $report->id }}
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="col status rejected">
-            <h4 class="text-uppercase p-2 rounded" style="background-color: #F44336; color: white;">Rejected</h4>
-            @foreach ($reports['Rejected'] ?? [] as $report)
-                <div class="report-card mb-3 p-3 border rounded" style="background-color: #FFCDD2;">
-                    <a href="{{ route('admin.reports.show', $report->id) }}" style="color: #B71C1C; font-weight: bold;">
-                        {{ $report->user->name ?? 'Anonymous' }} - {{ $report->created_at->format('F j, Y H:i') }} <br> ID: {{ $report->id }}
-                    </a>
-                </div>
-            @endforeach
-        </div>
-    </div>
+    @endif
 </div>
+
+<script>
+    document.getElementById('printButton').addEventListener('click', function() {
+        var status = document.getElementById('status').value;
+        if (status) {
+            // Open a new window and print only the reports with the selected status
+            var url = '{{ route("admin.reports.print") }}?status=' + encodeURIComponent(status);
+            var printWindow = window.open(url, '_blank');
+            printWindow.onload = function() {
+                printWindow.print();
+            };
+        } else {
+            alert('Please select a status to print.');
+        }
+    });
+</script>
 
 @endsection
