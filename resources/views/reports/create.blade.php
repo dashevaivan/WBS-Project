@@ -2,11 +2,20 @@
 
 @section('content')
 
-<h1 class="card-title d-flex justify-content-center" style="font-family: Montserrat; font-weight: bold; margin-top: 40px; margin-bottom: 40px;">REPORT A VIOLATION</h1>
+<div class="container d-flex align-items-center justify-content-between" style="margin-top: 40px; margin-bottom: 40px;">
+    <a href="{{ url()->previous() }}" class="d-flex text-back align-items-center">
+        <img src="{{URL('back.png')}}" alt="" width="19" height="39" style="margin-right: 0.5rem">Kembali
+    </a>
+    <h1 class="card-title" style="font-family: Montserrat; font-weight: bold; text-align: center; margin-left: -90px;">LAPORKAN PELANGGARAN</h1>
+    <div></div>
+</div>
+
 
 <div class="container">
     <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px;">Pelanggaran apa yang ingin anda laporkan?</h3>
-    <form action="" method="POST">
+
+    <form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-3 form-check">
@@ -18,7 +27,7 @@
                     <label class="form-check-label" for="suap">Suap</label>
                 </div>
                 <div class="col-md-4 mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="gratifikasi" name="violations[]" value="gratifikasi">
+                    <input type="checkbox" class="form-check-input" id="gratifikasi" name="violations[]" value="Gratifikasi">
                     <label class="form-check-label" for="gratifikasi">Gratifikasi</label>
                 </div>
                 <div class="col-md-4 mb-3 form-check">
@@ -36,21 +45,24 @@
                 </div>
             </div>
         </div>
+
+        <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px;">Apa yang terjadi?</h3>
+        <div class="form-floating">
+            <textarea class="form-control" id="floatingTextarea2" name="description" style="height: 200px; width: 100%;" required></textarea>
+            <label for="floatingTextarea2">Jelaskan kejadian disini...</label>
+        </div>
+
+        <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px; margin-top: 15px;">Jika memungkinkan, lampirkan bukti yang mempermudah investigasi kasus</h3>
+        <div class="mb-3">
+            <input type="file" name="evidence" accept="pdf">
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" style="border-radius: 22px; background-color: #00BCF4; font-weight: bold; text-align: center;">Kirim</button>
+        </div>
     </form>
 
-    <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px;">Apa yang terjadi?</h3>
-    <div class="form-floating" action="">
-        <textarea class="form-control" id="floatingTextarea2" style="height: 200px; width: 1200px;"></textarea>
-        <label for="floatingTextarea2">Jelaskan kejadian disini...</label>
-    </div>
-
-    <h3 style="font-family: Montserrat; font-weight: bold; font-size: 24px; margin-top: 15px;">Jika memungkinkan, lampirkan bukti yang mempermudah investigasi kasus</h3>
-        <form action="" style="margin-bottom: 25px;" method="POST" enctype="multipart/form-data">
-            <input type="file" name="evidence" accept="pdf">
-        </form>
-
-    <a href="" class="btn btn-primary" style="display: flex; border-radius: 22px; background-color: #00BCF4; font-weight: bold; text-align: center; display: block;">Submit</a>
-
+    
 </div>
 
 @endsection

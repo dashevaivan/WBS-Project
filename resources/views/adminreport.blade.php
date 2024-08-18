@@ -10,7 +10,7 @@
 
 <div class="container d-flex align-items-center">
 <form action="" style="margin-bottom: 20px;">
-  <label for="date">Period :</label>
+  <label for="date">Period:</label>
   <input type="date" id="startperiod" name="startperiod">
   <label for="date">-</label>
   <input type="date" id="endperiod" name="endperiod">
